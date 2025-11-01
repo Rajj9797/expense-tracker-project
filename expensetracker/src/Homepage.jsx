@@ -130,7 +130,9 @@ function Homepage() {
                         ]
                     }
                 />
-
+            </div>
+            <div className={styles.transactionsWrapper}>
+                
 
             </div>
 
