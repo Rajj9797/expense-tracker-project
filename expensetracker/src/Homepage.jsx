@@ -2,7 +2,7 @@ import React, { use, useEffect, useState } from "react";
 import styles from "./Homepage.module.css";
 import Card from "./Components/Cards/Card";
 import PieChartComponent from "./Components/PieChart/PieChart";
-
+import BarChart from "./Components/BarChart/BarChart";
 function Homepage() {
     const [balance, setBalance] = useState(0);
     const [expense, setExpense] = useState(0);
@@ -132,7 +132,13 @@ function Homepage() {
                 />
             </div>
             <div className={styles.transactionsWrapper}>
-                
+                <BarChart
+                    data = {[
+                        { name: "Food", value: categorySpends.food},
+                        { name: "Entertainment", value: categorySpends.entertainment},
+                        { name: "travel", value: categorySpends.travel},
+                    ]}
+                />
 
             </div>
 
