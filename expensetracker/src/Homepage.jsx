@@ -42,7 +42,7 @@ function Homepage() {
 
     useEffect(() => {
         if (expenseList.length > 0 || isMounted) {
-            localStorage.setItem("exoenses", JSON.stringify(expenseList));
+            localStorage.setItem("expenses", JSON.stringify(expenseList));
         }
 
         if(expenseList.length > 0){
