@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import styles from "./Homepage.module.css";
 import Card from "./Components/Cards/Card";
+import PieChartComponent from "./Components/PieChart/PieChart";
 
 function Homepage() {
     const [balance, setBalance] = useState(0);
@@ -21,6 +22,81 @@ function Homepage() {
         entertainment: 0,
         travel: 0,
     });
+
+    useEffect(() => {
+
+        const localBalance = localStorage.getItem("balance");
+
+        if(localBalance){
+            setBalance(Number(localBalance));
+        }else{
+            setBalance(5000);
+            localStorage.setItem("balance", 5000);
+        }
+
+        const items = JSON.parse(localStorage.getItem("expenses"));
+
+        setExpenseList(items || []);
+        setIsMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (expenseList.length > 0 || isMounted) {
+            localStorage.setItem("exoenses", JSON.stringify(expenseList));
+        }
+
+        if(expenseList.length > 0){
+            setExpense(
+                expenseList.reduce(
+                    (total, item) => total + Number(item.price),
+                    0
+                )
+            );
+        } else {
+            setExpense(0);
+        }
+
+        let foodSpends = 0,
+        entertainmentSpends = 0,
+        travelSpends = 0;
+
+        let foodCount = 0,
+        entertainmentCount = 0,
+        travelCount = 0;
+
+        expenseList.forEach((item) => {
+            if(item.category == "food"){
+                foodSpends += Number(item.price);
+                foodCount += 1;
+            } else if(item.category == "entertainment"){
+                entertainmentSpends += Number(item.price);
+                entertainmentCount += 1;
+            } else if(item.category == "travel"){
+                travelSpends += Number(item.price);
+                travelCount += 1;
+            }
+        });
+
+        setCategorySpends({
+            food: foodSpends,
+            entertainment: entertainmentSpends,
+            travel: travelSpends,
+        });
+
+        setCategoryCount({
+            food: foodCount,
+            entertainment: entertainmentCount,
+            travel: travelCount,
+        });
+
+    }, [expenseList]);
+
+
+    useEffect(() => {
+        if(isMounted){
+            localStorage.setItem("balance", balance);
+        }
+    }, [balance]);
 
     return (
         <div className={styles.container}>
@@ -45,7 +121,20 @@ function Homepage() {
                         setIsOpenExpense(true);
                     }}
                 />
+                <PieChartComponent
+                    data={
+                        [
+                            { name: "Food", value: categorySpends.food},
+                            { name: "Entertainment", value: categorySpends.entertainment},
+                            { name: "travel", value: categorySpends.travel},
+                        ]
+                    }
+                />
+
+
             </div>
+
+
         </div>
     );
 }

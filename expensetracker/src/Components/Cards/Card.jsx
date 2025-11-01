@@ -1,6 +1,5 @@
 import Button from '../Button/Button';
 import styles from './Card.module.css';
-import React from 'react';
 
 function Card({ title, money, buttonText, buttonType, handleClick, success=true}){
     return (
