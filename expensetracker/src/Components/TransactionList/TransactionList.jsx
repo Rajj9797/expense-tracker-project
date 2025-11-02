@@ -1,22 +1,24 @@
-import styles from "./TransactionList.module.css";
-import TransactionCard from "../TransactionCard/TransactionCard";
-// Modal is not used here; remove import
-import Pagination from "../Pagination/Pagination";
-import { useState, useEffect } from "react";
-
+import TransactionCard from '../TransactionCard/TransactionCard'
+import styles from './TransactionList.module.css'
+import Modal from '../Modal/Modal'
+import ExpenseForm from '../Forms/ExpenseForm/ExpenseForm'
+import { useEffect, useState } from 'react'
+import Pagination from '../Pagination/Pagination'
 
 export default function TransactionList({ transactions, title, editTransactions, balance, setBalance }) {
 
-    // editor-related state removed because editor/modal isn't used in this list component
-    const [currentTransactions, setCurrentTransactions] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [editId, setEditId] = useState(0)
+    const [isDisplayEditor, setIsDisplayEditor] = useState(false)
+    const [currentTransactions, setCurrentTransactions] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
     const maxRecords = 3;
-    const [totalPages, setTotalPages] = useState(0);
+    const [totalPages, setTotalPages] = useState(0)
 
     const handleDelete = (id) => {
-        const item = transactions.find(i => i.id === id);
-        const price = Number(item.price);
-        setBalance(prev => prev + price);
+
+        const item = transactions.find(i => i.id === id)
+        const price = Number(item.price)
+        setBalance(prev => prev + price)
 
         editTransactions(prev => (
             prev.filter(item => item.id !== id)
@@ -24,29 +26,34 @@ export default function TransactionList({ transactions, title, editTransactions,
     }
 
     const handleEdit = (id) => {
-        // Edit functionality/modal not implemented in this component.
-        // Placeholder to satisfy callers.
-        return;
+        setEditId(id)
+        setIsDisplayEditor(true)
     }
 
     useEffect(() => {
-        const startIndex = (currentPage - 1) * maxRecords;
-        const endIndex = Math.min(currentPage * maxRecords, transactions.length);
 
-        setCurrentTransactions([...transactions].slice(startIndex, endIndex));
-        setTotalPages(Math.ceil(transactions.length / maxRecords));
-    }, [currentPage, transactions]);
+        const startIndex = (currentPage - 1) * maxRecords
+        const endIndex = Math.min(currentPage * maxRecords, transactions.length)
 
+        setCurrentTransactions([...transactions].slice(startIndex, endIndex))
+        setTotalPages(Math.ceil(transactions.length / maxRecords))
+
+    }, [currentPage, transactions])
+
+    // update page if all items on current page have been deleted
     useEffect(() => {
 
         if(totalPages < currentPage && currentPage > 1){
-            setCurrentPage(prev => prev -1);
+            setCurrentPage(prev => prev - 1)
         }
-    }, [totalPages, currentPage]);
+
+    }, [totalPages, currentPage])
 
     return (
         <div className={styles.transactionsWrapper}>
+
             {title && <h2>{title}</h2>}
+
             {transactions.length > 0 ?
                 <div className={styles.list}>
                     <div>
@@ -56,25 +63,29 @@ export default function TransactionList({ transactions, title, editTransactions,
                                 key={transaction.id}
                                 handleDelete={() => handleDelete(transaction.id)}
                                 handleEdit={() => handleEdit(transaction.id)}
-                                />
+                            />
                         ))}
                     </div>
-                    {totalPages > 1 &&
-                        <Pagination
-                            updatePage={setCurrentPage}
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                        />
-                    }
+                    {totalPages > 1 && (<Pagination updatePage={setCurrentPage} currentPage={currentPage} totalPages={totalPages} />)}
                 </div>
                 : (
                     <div className={styles.emptyTransactionsWrapper}>
                         <p>No transactions!</p>
-                        </div>
+                    </div>
                 )
             }
 
-               
+
+            <Modal isOpen={isDisplayEditor} setIsOpen={setIsDisplayEditor}>
+                <ExpenseForm
+                    editId={editId}
+                    expenseList={transactions}
+                    setExpenseList={editTransactions}
+                    setIsOpen={setIsDisplayEditor}
+                    balance={balance}
+                    setBalance={setBalance}
+                />
+            </Modal>
         </div>
     )
 }

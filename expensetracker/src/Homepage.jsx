@@ -3,14 +3,17 @@ import styles from "./Homepage.module.css";
 import Card from "./Components/Cards/Card";
 import PieChartComponent from "./Components/PieChart/PieChart";
 import BarChart from "./Components/BarChart/BarChart";
+import Modal from "./Components/Modal/Modal";
+import ExpenseForm from "./Components/Forms/ExpenseForm/ExpenseForm";
+import AddBalanceForm from "./Components/Forms/AddBalanaceForm/AddBalanceForm";
 import TransactionList from "./Components/TransactionList/TransactionList";
 function Homepage() {
     const [balance, setBalance] = useState(0);
     const [expense, setExpense] = useState(0);
     const [expenseList, setExpenseList] = useState([]);
     const [isMounted, setIsMounted] = useState(false);
-    const [, setIsOpenExpense] = useState(false);
-    const [, setIsOpenBalance] = useState(false);
+    const [isOpenExpense, setIsOpenExpense] = useState(false);
+    const [isOpenBalance, setIsOpenBalance] = useState(false);
 
     const [categorySpends, setCategorySpends] = useState({
         food: 0,
@@ -152,6 +155,20 @@ function Homepage() {
                 />
 
             </div>
+
+            <Modal isOpen={isOpenExpense} setIsOpen={setIsOpenExpense}>
+                <ExpenseForm
+                setIsOpen={setIsOpenExpense}
+                expenseList={expenseList}
+                setExpenseList={setExpenseList}
+                setBalance={setBalance}
+                balance={balance}
+                />
+            </Modal>
+
+            <Modal isOpen={isOpenBalance} setIsOpen={setIsOpenBalance}>
+                <AddBalanceForm setIsOpen={setIsOpenBalance} setBalance={setBalance} />
+            </Modal>
 
 
         </div>
