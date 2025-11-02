@@ -3,6 +3,8 @@ import styles from "./Homepage.module.css";
 import Card from "./Components/Cards/Card";
 import PieChartComponent from "./Components/PieChart/PieChart";
 import BarChart from "./Components/BarChart/BarChart";
+import TransactionCard from "./Components/TransactionCard/TransactionCard";
+import TransactionList from "./Components/TransactionList/TransactionList";
 function Homepage() {
     const [balance, setBalance] = useState(0);
     const [expense, setExpense] = useState(0);
@@ -132,6 +134,16 @@ function Homepage() {
                 />
             </div>
             <div className={styles.transactionsWrapper}>
+
+                <TransactionList 
+                    transactions={expenseList}
+                    editTransactions={setExpenseList}
+                    title="Recent Transactions"
+                    balanace={balance}
+                    setBalance={setBalance}
+                />
+
+                
                 <BarChart
                     data = {[
                         { name: "Food", value: categorySpends.food},
