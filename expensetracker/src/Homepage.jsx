@@ -1,17 +1,16 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Homepage.module.css";
 import Card from "./Components/Cards/Card";
 import PieChartComponent from "./Components/PieChart/PieChart";
 import BarChart from "./Components/BarChart/BarChart";
-import TransactionCard from "./Components/TransactionCard/TransactionCard";
 import TransactionList from "./Components/TransactionList/TransactionList";
 function Homepage() {
     const [balance, setBalance] = useState(0);
     const [expense, setExpense] = useState(0);
     const [expenseList, setExpenseList] = useState([]);
     const [isMounted, setIsMounted] = useState(false);
-    const [isOpenExpense, setIsOpenExpense] = useState(false);
-    const [isOpenBalance, setIsOpenBalance] = useState(false);
+    const [, setIsOpenExpense] = useState(false);
+    const [, setIsOpenBalance] = useState(false);
 
     const [categorySpends, setCategorySpends] = useState({
         food: 0,
@@ -19,7 +18,7 @@ function Homepage() {
         travel: 0,
     });
 
-    const [categoryCount, setCategoryCount] = useState({
+    const [, setCategoryCount] = useState({
         food: 0,
         entertainment: 0,
         travel: 0,
@@ -67,13 +66,13 @@ function Homepage() {
         travelCount = 0;
 
         expenseList.forEach((item) => {
-            if(item.category == "food"){
+            if(item.category === "food"){
                 foodSpends += Number(item.price);
                 foodCount += 1;
-            } else if(item.category == "entertainment"){
+            } else if(item.category === "entertainment"){
                 entertainmentSpends += Number(item.price);
                 entertainmentCount += 1;
-            } else if(item.category == "travel"){
+            } else if(item.category === "travel"){
                 travelSpends += Number(item.price);
                 travelCount += 1;
             }
@@ -91,14 +90,14 @@ function Homepage() {
             travel: travelCount,
         });
 
-    }, [expenseList]);
+    }, [expenseList, isMounted]);
 
 
     useEffect(() => {
         if(isMounted){
             localStorage.setItem("balance", balance);
         }
-    }, [balance]);
+    }, [balance, isMounted]);
 
     return (
         <div className={styles.container}>
@@ -143,7 +142,7 @@ function Homepage() {
                     setBalance={setBalance}
                 />
 
-                
+
                 <BarChart
                     data = {[
                         { name: "Food", value: categorySpends.food},

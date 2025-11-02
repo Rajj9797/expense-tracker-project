@@ -1,5 +1,5 @@
 // import React, { PureComponent } from 'react';
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Legend } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from 'recharts';
 
 const COLORS = ['#A000FF', '#FF9304', '#FDE006'];
 
@@ -16,7 +16,7 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, per
     );
 };
 
-export default function PieChartComponent({data}) {
+export default function PieChartComponent({ data = [] }) {
     return (
         <ResponsiveContainer width="100%" height={250}>
             <PieChart width={400} height={400}>

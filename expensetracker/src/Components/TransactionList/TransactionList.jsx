@@ -1,14 +1,13 @@
 import styles from "./TransactionList.module.css";
 import TransactionCard from "../TransactionCard/TransactionCard";
-import Modal from "../Modal/Modal";
+// Modal is not used here; remove import
 import Pagination from "../Pagination/Pagination";
 import { useState, useEffect } from "react";
 
 
 export default function TransactionList({ transactions, title, editTransactions, balance, setBalance }) {
 
-    const [editId, setEditId] = useState(0);
-    const [isDisplayEditor, setIsDisplayEditor] = useState(false);
+    // editor-related state removed because editor/modal isn't used in this list component
     const [currentTransactions, setCurrentTransactions] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const maxRecords = 3;
@@ -20,13 +19,14 @@ export default function TransactionList({ transactions, title, editTransactions,
         setBalance(prev => prev + price);
 
         editTransactions(prev => (
-            prev.filter(item => item.id != id)
+            prev.filter(item => item.id !== id)
         ))
     }
 
     const handleEdit = (id) => {
-        setEditId(id);
-        setIsDisplayEditor(true);
+        // Edit functionality/modal not implemented in this component.
+        // Placeholder to satisfy callers.
+        return;
     }
 
     useEffect(() => {
@@ -42,7 +42,7 @@ export default function TransactionList({ transactions, title, editTransactions,
         if(totalPages < currentPage && currentPage > 1){
             setCurrentPage(prev => prev -1);
         }
-    }, [totalPages]);
+    }, [totalPages, currentPage]);
 
     return (
         <div className={styles.transactionsWrapper}>
